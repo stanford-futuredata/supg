@@ -3,14 +3,15 @@ from supg.sampler import ImportanceSampler
 from supg.selector import ApproxQuery
 from supg.selector import RecallSelector
 from supg.selector import ImportancePrecisionTwoStageSelector
+from supg.experiments.trial_runner import TrialRunner
 
 
-def run_helper(csv_fname, budget, target, qtype, delta=0.05):
+def run_helper(csv_fname, budget, target, qtype, delta=0.05, verbose=False):
     source = datasource.load_csv_source(csv_fname)
     sampler = ImportanceSampler()
     query = ApproxQuery(
             qtype=qtype,
-            min_recall=target, min_precision=target, delta=0.05
+            min_recall=target, min_precision=target, delta=0.05,
             budget=budget
     )
 
@@ -27,7 +28,8 @@ def run_helper(csv_fname, budget, target, qtype, delta=0.05):
             query=query,
             sampler=sampler,
             source=source,
-            nb_trials=100
+            nb_trials=100,
+            verbose=verbose
     )
     return results_df
 

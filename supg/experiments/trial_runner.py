@@ -21,13 +21,18 @@ class TrialRunner:
             sampler: sampler.Sampler,
             source: datasource.DataSource,
             nb_trials: int = 100,
+            verbose: bool = True,
     ):
         results = []
         ordered_ids = source.get_ordered_idxs()
         true_labels = source.lookup(ordered_ids)
         nb_true = np.sum(true_labels)
 
-        for i in tqdm(range(nb_trials)):
+        if verbose:
+            itr = tqdm(range(nb_trials))
+        else:
+            itr = range(nb_trials)
+        for i in itr:
             inds = selector.select()
             nb_got = np.sum(source.lookup(inds))
             prec = nb_got / len(inds)
