@@ -20,6 +20,33 @@ class DataSource:
 
     def lookup_yprob(self, ids) -> np.ndarray:
         raise NotImplemented()
+        
+        
+class RealtimeDataSource(DataSource):
+    def __init__(
+        self,
+        y_pred,
+        y_true,
+        seed=123041
+    ):
+        self.y_pred = y_pred
+        self.y_true = y_true
+        self.random = np.random.RandomState(seed)
+        self.proxy_score_sort = np.argsort(y_pred)[::-1]
+        self.lookups = 0
+        
+    def lookup(self, ids):
+        self.lookups += len(ids)
+        return self.y_true[ids]
+
+    def get_ordered_idxs(self) -> np.ndarray:
+        return self.proxy_score_sort
+
+    def get_y_prob(self) -> np.ndarray:
+        return self.y_pred[self.proxy_score_sort]
+
+    def lookup_yprob(self, ids) -> np.ndarray:
+        return self.y_pred[ids]
 
 
 class DFDataSource(DataSource):
