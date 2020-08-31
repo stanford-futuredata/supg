@@ -28,15 +28,11 @@ class RealtimeDataSource(DataSource):
         y_pred,
         y_true,
         seed=123041,
-        use_lexsort=False
     ):
         self.y_pred = y_pred
         self.y_true = y_true
         self.random = np.random.RandomState(seed)
-        if use_lexsort:
-            self.proxy_score_sort = np.lexsort((self.random.random(y_pred.size), y_pred))[::-1]
-        else:
-            self.proxy_score_sort = np.argsort(y_pred)[::-1]
+        self.proxy_score_sort = np.lexsort((self.random.random(y_pred.size), y_pred))[::-1]
         self.lookups = 0
 
     def lookup(self, ids):
