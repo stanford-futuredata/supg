@@ -32,7 +32,7 @@ class RealtimeDataSource(DataSource):
         self.y_pred = y_pred
         self.y_true = y_true
         self.random = np.random.RandomState(seed)
-        self.proxy_score_sort = np.argsort(y_pred)[::-1]
+        self.proxy_score_sort = np.lexsort((np.random.random(y_pred.size), y_pred))[::-1]
         self.lookups = 0
         
     def lookup(self, ids):
